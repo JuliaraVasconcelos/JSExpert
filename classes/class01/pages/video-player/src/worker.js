@@ -28,9 +28,14 @@ try {
 }
 
 onmessage = async ({ data: video }) => {
-    const blinked = await service.headBlinked(video);
-    if(!blinked) return;
-    postMessage({ blinked })
+    // const blinked = await service.headBlinked(video);
+    // if(!blinked) return;
+    // postMessage({ blinked })
+
+    const {leftBlink, rightBlink} = await service.headBlinked(video);
+
+    if(!leftBlink && !rightBlink) return;
+    postMessage({leftBlink, rightBlink})
 }
 
 // onmessage = ({ data }) => {

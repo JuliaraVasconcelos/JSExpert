@@ -3,6 +3,8 @@ export default class Controller {
     #view
     #camera
     #worker
+    #blinkLeftCounter = 0;
+    #blinkRightCounter = 0;
     #blinkCounter = 0
 
     constructor({ view, worker, camera }) {
@@ -28,10 +30,24 @@ export default class Controller {
                 ready = true
                 return;
             }
-            const blinked = data.blinked
-            this.#blinkCounter += blinked
-            this.#view.tooglePlayVideo()
-            console.log('blinked', blinked);
+
+            // const blinked = data.blinked
+            // this.#blinkCounter += blinked
+            // this.#view.tooglePlayVideo()
+            // console.log('blinked', blinked);
+
+            const leftBlink = data.leftBlink;
+            const rightBlink = data.rightBlink;
+            if (!leftBlink && !rightBlink) return;
+
+            this.#blinkCounter += leftBlink || rightBlink;
+
+            if (leftBlink && !rightBlink) this.#view.tooglePlayVideo();
+            
+
+            console.log('blinked left', leftBlink);
+            console.log('blinked right', rightBlink);
+
         }
         return {
             send(msg) {
@@ -45,6 +61,7 @@ export default class Controller {
         console.log('init');
         // this.#worker.postMessage('CONTROLLER')
     }
+
     loop(){
         const video = this.#camera.video
         const img = this.#view.getVideoFrame(video)
@@ -55,12 +72,23 @@ export default class Controller {
     }
 
     log(text) {
-        const times = `     - blinked times: ${this.#blinkCounter}`
-        this.#view.log(`status: ${text}`.concat(this.#blinkCounter ? times: ''))
+
+        // const times = `     - blinked times: ${this.#blinkCounter}`
+        // this.#view.log(`status: ${text}`.concat(this.#blinkCounter ? times : ''))
+
+        const timesRight = `        - blink time: ${this.#blinkRightCounter}`
+        const timesLeft = `        - blink time: ${this.#blinkLeftCounter}`
+        this.#view.log(`status: ${text}`.concat(this.#blinkRightCounter ? timesRight : "").concat(this.#blinkLeftCounter ? timesLeft : ""))
     }
+    
     onBtnStart() {
+        // this.log('initializing detection...')
+        // this.#blinkCounter = 0
+        // this.loop()
+
         this.log('initializing detection...')
-        this.#blinkCounter = 0
+        this.#blinkLeftCounter = 0;
+        this.#blinkRightCounter = 0;
         this.loop()
     }
 }
