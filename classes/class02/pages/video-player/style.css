@@ -1,0 +1,21 @@
+:root {
+    font-size: 62.5%;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+video {
+    width: 95%;
+    margin: 1rem;
+}
+button{
+    margin: 1rem;
+}
+.button-container{
+    margin-left: 2rem;
+}
